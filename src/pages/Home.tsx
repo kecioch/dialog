@@ -3,9 +3,9 @@ import Navbar from "../components/chat/nav/Navbar";
 import ChatList from "../components/chat/ChatList";
 import Chat from "../components/chat/Chat";
 
-const USER_ID = "007";
+export const USER_ID = "007";
 
-export interface ChatMessage {
+export interface ChatMessageData {
   from: string;
   date: Date;
   text: string;
@@ -15,14 +15,19 @@ export interface ChatMessage {
 export interface ChatData {
   //   id: string;
   name: string;
-  messages: ChatMessage[];
+  messages: ChatMessageData[];
 }
 
 const CHAT_DATA: ChatData[] = [
   {
     name: "Albert Flores",
     messages: [
-      { from: "001", date: new Date("01-01-2026"), text: "Hello!", read: true },
+      {
+        from: "001",
+        date: new Date("01-01-2026"),
+        text: "Hello! 👍",
+        read: true,
+      },
     ],
   },
   {
@@ -89,7 +94,25 @@ const CHAT_DATA: ChatData[] = [
       {
         from: "004",
         date: new Date("01-01-2026"),
-        text: "You want going to Mordor? I need a Partner",
+        text: "You want going to Mordor? I need a Partner. You want going to Mordor? I need a Partner. You want going to Mordor? I need a Partner",
+        read: true,
+      },
+      {
+        from: USER_ID,
+        date: new Date("01-01-2026"),
+        text: "I dont know.",
+        read: true,
+      },
+      {
+        from: USER_ID,
+        date: new Date("01-01-2026"),
+        text: "Isnt it dangerous? I think its too dangerous.",
+        read: true,
+      },
+      {
+        from: "004",
+        date: new Date("01-01-2026"),
+        text: "Noooooo, trust me. You can trust me bro. Sauron isnt waiting",
         read: false,
       },
     ],
@@ -137,23 +160,37 @@ const CHAT_DATA: ChatData[] = [
 ];
 
 const Home = () => {
+  const [chats, setChats] = useState<ChatData[]>(CHAT_DATA);
   const [selectedChatIndex, setSelectedChatIndex] = useState<number>();
 
   const handleSelectChat = (index: number) => setSelectedChatIndex(index);
 
+  const handleSearchChat = (text: string) => {
+    setChats(
+      CHAT_DATA.filter((el) =>
+        el.name.toLowerCase().includes(text.toLocaleLowerCase()),
+      ),
+    );
+  };
+
   return (
     <div className="w-full h-screen flex from-[var(--primary-500)] to-[var(--primary-300)] bg-gradient-to-br">
       <Navbar className="min-w-[4em]" />
-      <main className="flex-1 bg-[var(--neutral-100)] rounded-l-3xl flex py-10 pr-8">
+      <main className="flex-1 bg-[var(--bg-chatlist)] rounded-l-3xl flex py-10 pr-8 min-w-0 transition-colors duration-200">
         <ChatList
-          className="min-w-[25em] w-[20%] text-[var(--neutral-400)]"
-          chats={CHAT_DATA}
+          className="min-w-[20em] w-[20%] text-[var(--neutral-400)]"
+          chats={chats}
           selectedChatIndex={selectedChatIndex}
           onSelect={handleSelectChat}
+          onSearch={handleSearchChat}
         />
         <Chat
-          className="flex-1"
-          data={selectedChatIndex !== undefined ? CHAT_DATA[selectedChatIndex] : undefined}
+          className="flex-1 min-w-0"
+          data={
+            selectedChatIndex !== undefined
+              ? CHAT_DATA[selectedChatIndex]
+              : undefined
+          }
         />
       </main>
     </div>

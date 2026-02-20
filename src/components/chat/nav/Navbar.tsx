@@ -3,6 +3,7 @@ import LogoSmall from "../../ui/LogoSmall";
 import NavbarButton from "./NavbarButton";
 import { faGear, faMessage, faMoon, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "../Avatar";
+import ThemeSwitchButton from "./ThemeSwitchButton";
 
 interface Props {
   className?: string;
@@ -18,10 +19,10 @@ const Navbar = ({ className }: Props) => {
         <NavbarButton icon={faMessage} title="Chats" active />
         <NavbarButton icon={faUserGroup} title="Contacts" />
         <div className="h-[1.5px] w-full bg-[var(--primary-700)]" />
-        <NavbarButton icon={faMoon} title="Switch to Darkmode" />
+        <ThemeSwitchButton />
         <NavbarButton icon={faGear} title="Settings" />
       </nav>
-      <Avatar rounded />
+      <Avatar className="border-[1.5px] border-[var(--secondary-500)] drop-shadow-lg" rounded />
     </section>
   );
 };

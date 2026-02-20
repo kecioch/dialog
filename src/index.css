@@ -23,10 +23,17 @@
 
   /* Light theme */
   --color-bg-box: var(--primary-500);
+  --bg-chatlist: var(--neutral-100);
+
+  --bg-chat: var(--neutral-100);
+  --bg-chat-header: var(--neutral-100);
+  --bg-chat-message: var(--neutral-100);
+  --bg-chat-message-own: var(--neutral-100);
 }
 
 [data-theme="dark"] {
   --color-bg-box: var(--accent-500);
+  --bg-chatlist: var(--neutral-500)
 }
 
 body {
