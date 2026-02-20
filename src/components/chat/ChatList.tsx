@@ -34,7 +34,7 @@ const ChatList = ({
           ))}
         </ul>
       ) : (
-        <h3 className="text-center font-light text-[var(--neutral-300)]">
+        <h3 className="text-center font-light text-[var(--text-color-muted)]">
           Looks empty here!
         </h3>
       )}

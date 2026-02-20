@@ -17,23 +17,57 @@
   --neutral-150: #f2f2f2;
   --neutral-200: #ececec;
   --neutral-300: #737373;
+  --neutral-350: #343434;
   --neutral-400: #2e2e2e;
   --neutral-450: #1f1a24;
   --neutral-500: #17131c;
 
   /* Light theme */
-  --color-bg-box: var(--primary-500);
   --bg-chatlist: var(--neutral-100);
-
-  --bg-chat: var(--neutral-100);
+  --bg-gradient-from: var(--primary-500);
+  --bg-gradient-to: var(--primary-300);
+  --bg-chat: var(--neutral-200);
   --bg-chat-header: var(--neutral-100);
   --bg-chat-message: var(--neutral-100);
-  --bg-chat-message-own: var(--neutral-100);
+  --bg-chat-message-own: var(--secondary-300);
+  --bg-chat-input: var(--neutral-100);
+  --bg-chatlist-search-input: var(--neutral-200);
+  --bg-chatlist-selected: var(--neutral-150);
+  --bg-chatlist-selected-active: var(--neutral-200);
+  --text-color-main: var(--neutral-500);
+  --text-color-chatlist: var(--neutral-400);
+  --text-color-chatlist-muted: var(--neutral-300);
+  --text-color-chatlist-time: var(--neutral-400);
+  --text-color-muted: var(--neutral-300);
+  --text-color-muted-active: var(--neutral-400);
 }
 
 [data-theme="dark"] {
-  --color-bg-box: var(--accent-500);
-  --bg-chatlist: var(--neutral-500)
+  --bg-chatlist: var(--neutral-500);
+  --bg-gradient-from: var(--primary-700);
+  --bg-gradient-to: var(--primary-500);
+  --bg-chat: var(--neutral-450);
+  --bg-chat-header: var(--neutral-400);
+  --bg-chat-message: var(--neutral-400);
+  --bg-chat-message-own: var(--primary-500);
+  --bg-chat-input: var(--neutral-400);
+  --bg-chatlist-search-input: var(--neutral-400);
+  --bg-chatlist-selected: var(--neutral-400);
+  --bg-chatlist-selected-active: var(--neutral-350);
+  --text-color-main: var(--neutral-100);
+  --text-color-chatlist: var(--neutral-200);
+  --text-color-chatlist-muted: var(--neutral-200);
+  --text-color-chatlist-time: var(--neutral-100);
+  --text-color-muted: var(--neutral-300);
+  --text-color-muted-active: var(--neutral-200);
+}
+
+.theme-transition {
+  /* transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke; */
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }
 
 body {
@@ -76,4 +110,3 @@ code {
 *::-webkit-scrollbar-thumb:hover {
   background-color: var(--neutral-400);
 }
-

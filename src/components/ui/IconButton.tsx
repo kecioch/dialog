@@ -24,7 +24,7 @@ const IconButton = ({
       className={cn(
         `py-1 px-1.5 rounded-md
         transition-all duration-200
-        ${fill ? "bg-[var(--secondary-700)] active:bg-[var(--secondary-500)] text-[var(--neutral-100)]" : "text-[var(--neutral-500)] active:text-[var(--neutral-300)]"}`,
+        ${fill ? "bg-[var(--secondary-700)] active:bg-[var(--secondary-500)] text-[var(--neutral-100)]" : "text-[var(--text-color-main)] active:text-[var(--neutral-300)]"}`,
         className,
       )}
       onClick={onClick}

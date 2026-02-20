@@ -174,11 +174,11 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full h-screen flex from-[var(--primary-500)] to-[var(--primary-300)] bg-gradient-to-br">
+    <div className="w-full h-screen flex from-[var(--bg-gradient-from)] to-[var(--bg-gradient-to)] bg-gradient-to-br theme-transition">
       <Navbar className="min-w-[4em]" />
-      <main className="flex-1 bg-[var(--bg-chatlist)] rounded-l-3xl flex py-10 pr-8 min-w-0 transition-colors duration-200">
+      <main className="flex-1 bg-[var(--bg-chatlist)] rounded-l-3xl flex py-10 pr-8 min-w-0 theme-transition">
         <ChatList
-          className="min-w-[20em] w-[20%] text-[var(--neutral-400)]"
+          className="min-w-[20em] w-[20%] text-[var(--text-color-chatlist)]"
           chats={chats}
           selectedChatIndex={selectedChatIndex}
           onSelect={handleSelectChat}

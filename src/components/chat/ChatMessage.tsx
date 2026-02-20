@@ -12,7 +12,7 @@ const ChatMessage = ({ data, isOwn }: Props) => {
       <div>
         <div
           className={`px-4 py-2 rounded-xl max-w-[40em]
-            ${isOwn ? "bg-[var(--secondary-300)]" : "bg-[var(--neutral-100)]"}`}
+            ${isOwn ? "bg-[var(--bg-chat-message-own)]" : "bg-[var(--bg-chat-message)]"}`}
         >
           <p>{data.text}</p>
         </div>

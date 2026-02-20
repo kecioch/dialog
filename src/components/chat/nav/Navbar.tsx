@@ -1,7 +1,7 @@
 import React from "react";
 import LogoSmall from "../../ui/LogoSmall";
 import NavbarButton from "./NavbarButton";
-import { faGear, faMessage, faMoon, faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faMessage, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "../Avatar";
 import ThemeSwitchButton from "./ThemeSwitchButton";
 
@@ -19,8 +19,8 @@ const Navbar = ({ className }: Props) => {
         <NavbarButton icon={faMessage} title="Chats" active />
         <NavbarButton icon={faUserGroup} title="Contacts" />
         <div className="h-[1.5px] w-full bg-[var(--primary-700)]" />
-        <ThemeSwitchButton />
         <NavbarButton icon={faGear} title="Settings" />
+        <ThemeSwitchButton />
       </nav>
       <Avatar className="border-[1.5px] border-[var(--secondary-500)] drop-shadow-lg" rounded />
     </section>

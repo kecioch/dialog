@@ -28,7 +28,7 @@ const Authentification = ({ loginMode }: Props) => {
           />
         </div>
       </section>
-      <main className="bg-[var(--neutral-100)] w-[100%] max-w-[40em] rounded-l-3xl flex flex-col items-center">
+      <main className="bg-[var(--neutral-100)] w-[100%]  max-w-[40em] rounded-l-3xl flex flex-col items-center">
         <div className="h-20 w-full flex justify-end items-center p-10">
           <ButtonNavLink to={loginMode ? "/signup" : "/login"} primaryColor>
             {loginMode ? "Signup" : "Login"}
