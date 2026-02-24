@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import FormInput from "./FormInput";
 import Button from "../ui/Button";
 import FormDivider from "./FormDivider";
-import { ReactComponent as IconGoogle } from "../../assets/icons/icon-google.svg";
 import { useAuth } from "../../hooks/useAuth";
+import AuthButtonGoogle from "./AuthButtonGoogle";
 
 type ErrorAPI = {
   code?: string;
@@ -24,7 +24,6 @@ const SignupForm = () => {
     setIsLoading(true);
     register({ email, firstName, lastName, password })
       .catch((err) => {
-        console.log("ERR:", err);
         setError(err);
       })
       .finally(() => setIsLoading(false));
@@ -32,10 +31,13 @@ const SignupForm = () => {
 
   return (
     <div className="flex flex-col gap-12">
-      <Button className="w-full" disabled={isLoading} flex>
-        <IconGoogle />
+      <AuthButtonGoogle
+        className="w-full"
+        disabled={isLoading}
+        setError={(text) => setError({ message: text })}
+      >
         Register with Google
-      </Button>
+      </AuthButtonGoogle>
       <FormDivider />
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex gap-4">

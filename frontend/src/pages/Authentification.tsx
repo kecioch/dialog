@@ -3,8 +3,8 @@ import LogoBig from "../components/ui/LogoBig";
 import ButtonNavLink from "../components/ui/ButtonNavLink";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignIn, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import LoginForm from "../components/form/LoginForm";
-import SignupForm from "../components/form/SignupForm";
+import LoginForm from "../components/forms/LoginForm";
+import SignupForm from "../components/forms/SignupForm";
 
 interface Props {
   loginMode: boolean;

@@ -19,5 +19,6 @@ model User {
   firstName String
   lastName  String
   password  String?
+  googleId  String?  @unique
   createdAt DateTime @default(now())
 }

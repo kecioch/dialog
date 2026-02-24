@@ -5,6 +5,7 @@ type AuthContextType = {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginGoogle: (code: string) => Promise<void>;
   register: (data: NewUser) => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .then((data) => {
         if (data?.user) setUser(data.user);
       })
+      .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -36,6 +38,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     if (!res.ok) throw new Error("Login failed");
+
+    const data = await res.json();
+    setUser(data.user);
+  };
+
+  const loginGoogle = async (code: string) => {
+    const res = await fetch(process.env.REACT_APP_API_URL + "/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ code }),
+    });
+
+    if (!res.ok) throw new Error("Google login failed");
 
     const data = await res.json();
     setUser(data.user);
@@ -69,7 +85,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, loginGoogle, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
