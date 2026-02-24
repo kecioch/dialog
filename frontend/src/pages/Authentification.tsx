@@ -18,7 +18,7 @@ const Authentification = ({ loginMode }: Props) => {
           <LogoBig />
           <ButtonNavLink to="/">Back to home</ButtonNavLink>
         </nav>
-        <div className="flex-1 flex flex-col justify-center items-center gap-14">
+        <div className="flex-1 flex flex-col justify-center items-center gap-14 text-[var(--neutral-100)]">
           <h1 className="uppercase text-4xl xl:text-6xl text-center font-thin drop-shadow-2xl">
             {loginMode ? "Login" : "Signup"}
           </h1>

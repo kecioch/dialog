@@ -1,22 +1,32 @@
 import React from "react";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Landing from "./pages/Landing";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Authentification from "./pages/Authentification";
+import { RootRedirect } from "./routes/RootRedirect";
+import { PublicOnlyRoute } from "./routes/PublicOnlyRoute";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Authentification loginMode={true} />} />
+        <Route path="/" element={<RootRedirect />} />
+        <Route
+          path="/login"
+          element={
+            <PublicOnlyRoute>
+              <Authentification loginMode={true} />
+            </PublicOnlyRoute>
+          }
+        />
         <Route
           path="/signup"
-          element={<Authentification loginMode={false} />}
+          element={
+            <PublicOnlyRoute>
+              <Authentification loginMode={false} />
+            </PublicOnlyRoute>
+          }
         />
-        <Route path="*" element={<Landing />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

@@ -76,6 +76,7 @@ body {
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
+  color: var(--neutral-500);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

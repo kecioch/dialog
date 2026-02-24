@@ -14,7 +14,7 @@ const NavbarButton = ({ icon, title, active = false, onClick }: Props) => {
     <button
       onClick={onClick}
       title={title}
-      className={`p-1.5 rounded-lg text-
+      className={`p-1.5 rounded-lg text-[var(--neutral-100)]
         transition-all duration-200
         active:text-[var(--accent-500)] active:scale-105
         ${active && "bg-[var(--primary-700)]"}`}

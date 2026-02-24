@@ -7,27 +7,21 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import TextNavLink from "../components/ui/TextNavLink";
 
 const Landing = () => {
-  const toggleTheme = () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    document.documentElement.setAttribute(
-      "data-theme",
-      current === "dark" ? "light" : "dark",
-    );
-  };
-
   return (
     <div className="min-h-screen from-[var(--primary-700)] to-[var(--primary-500)] bg-gradient-to-br flex flex-col">
       <nav className="h-20 flex justify-between items-center p-10">
         <LogoBig />
         <div className="flex gap-8 justify-center items-center">
-          <TextNavLink to="/login">Login</TextNavLink>
+          <TextNavLink to="/login" className="text-[var(--neutral-100)]">
+            Login
+          </TextNavLink>
           <ButtonNavLink to="/signup">Signup</ButtonNavLink>
         </div>
       </nav>
       <main className="flex flex-1 justify-center items-center">
         <div className="w-[60%] flex justify-center items-center">
           <div className="flex justify-center items-start flex-col gap-10">
-            <h1 className="text-5xl/snug xl:text-7xl/snug uppercase font-thin">
+            <h1 className="text-5xl/snug xl:text-7xl/snug uppercase font-thin text-[var(--neutral-100)]">
               Chat from <br />
               everywhere.
             </h1>
@@ -43,12 +37,14 @@ const Landing = () => {
               </p>
               <a
                 href="https://www.github.com/kecioch/dialog"
+                target="_blank"
+                rel="noreferrer"
+                draggable={false}
                 className="uppercase text-[var(--secondary-500)] border-[var(--secondary-500)] 
                 text-center border-[1.5px] p-2 rounded-lg flex  justify-center items-center gap-2
                 transition-all duration-300
                 hover:text-[var(--accent-500)] hover:border-[var(--accent-500)]
-                active:text-[var(--accent-700)] active:border-[var(--accent-700)]"
-                draggable={false}
+                active:scale-[102%]"
               >
                 <FontAwesomeIcon icon={faGithub} className="text-lg" />
                 View source code

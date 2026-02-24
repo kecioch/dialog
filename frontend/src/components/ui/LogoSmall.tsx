@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const LogoSmall = () => {
   return (
-    <NavLink to="/home" draggable={false}>
+    <NavLink to="/" draggable={false}>
       <img
         src="images/dialog-logo-small.svg"
         alt="logo"
