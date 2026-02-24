@@ -24,7 +24,7 @@ const Chat = ({ data, className }: Props) => {
       {data && (
         <>
           <div className="h-16 w-full bg-[var(--bg-chat-header)] rounded-xl drop-shadow-md flex items-center justify-between gap-3 p-2 pr-4 ">
-            <Avatar className="h-full" />
+            <Avatar className="h-full" name={data.name} />
             <p className="flex-1 text-lg">{data?.name}</p>
             <IconButton icon={faSearch} className="text-xl" />
             <IconButton icon={faEllipsisVertical} className="text-xl" />

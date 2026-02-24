@@ -24,7 +24,7 @@ const ChatListItem = ({ data, selected = false, onClick }: Props) => {
             ${selected && "bg-[var(--bg-chatlist-selected)]"}`}
         onClick={onClick}
       >
-        <Avatar className="h-full" />
+        <Avatar className="h-full" name={data.name}  />
         <div className="flex-1 h-full flex flex-col justify-start item-start text-start min-w-0">
           <p className="font-normal truncate">{data.name}</p>
           <p className="font-light text-sm text-[var(--text-color-chatlist-muted)] truncate">

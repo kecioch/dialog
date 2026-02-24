@@ -16,7 +16,7 @@ interface Props {
 }
 
 const Navbar = ({ className }: Props) => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const handleLogout = () => {
     logout();
   };
@@ -36,6 +36,7 @@ const Navbar = ({ className }: Props) => {
       </nav>
       <Avatar
         className="border-[1.5px] border-[var(--secondary-500)] drop-shadow-lg"
+        name={user?.firstName + " " + user?.lastName}
         rounded
       />
     </section>
