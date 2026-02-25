@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import AuthButtonGoogle from "./AuthButtonGoogle";
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { login, loginPasskey } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +22,12 @@ const LoginForm = () => {
         setError("Login failed");
       })
       .finally(() => setIsLoading(false));
+  };
+
+  const handlePasskeyLogin = () => {
+    loginPasskey()
+      .then(console.log)
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -63,7 +69,12 @@ const LoginForm = () => {
           disabled={isLoading}
           setError={(text) => setError(text)}
         />
-        <Button className="w-full" disabled={isLoading} flex>
+        <Button
+          className="w-full"
+          disabled={isLoading}
+          flex
+          onClick={handlePasskeyLogin}
+        >
           <FontAwesomeIcon icon={faKey} />
           Sign in with Passkey
         </Button>

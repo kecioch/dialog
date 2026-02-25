@@ -6,13 +6,10 @@ export const requireAuth = (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.cookies.token;
-
-  if (!token) {
-    return res.sendStatus(401);
-  }
-
   try {
+    const token = req.cookies.token;
+    if (!token) return res.sendStatus(401);
+
     const payload = verifyToken(token);
     req.user = payload;
     next();

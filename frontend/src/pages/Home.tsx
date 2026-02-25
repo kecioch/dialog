@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/chat/nav/Navbar";
 import ChatList from "../components/chat/ChatList";
 import Chat from "../components/chat/Chat";
-import Drawer, { DrawerView } from "../components/chat/drawer/Drawer";
+import { DrawerView } from "../components/chat/drawer/Drawer";
 import { AnimatePresence } from "framer-motion";
 import DrawerSettings from "../components/chat/drawer/DrawerSettings";
 import DrawerContacts from "../components/chat/drawer/DrawerContacts";

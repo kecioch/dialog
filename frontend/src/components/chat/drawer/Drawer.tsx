@@ -17,14 +17,14 @@ const Drawer = ({ children, title, onClose }: Props) => {
       animate={{ x: 0 }}
       exit={{ x: "-100%" }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute inset-0 rounded-3xl bg-[var(--bg-chatlist)] h-full theme-transition"
+      className="absolute inset-0 rounded-3xl bg-[var(--bg-chatlist)] h-full theme-transition xbg-green-800"
     >
       <div className="flex justify-end pt-4 ">
         <IconButton icon={faX} className="text-xl" onClick={onClose} />
       </div>
-      <div className="p-6 h-full">
+      <div className="h-full pb-24 flex flex-col bg-red-950x">
         <h2 className="text-3xl uppercase text-center mb-7">{title}</h2>
-        <div className="h-full overflow-y-auto">{children}</div>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden bg-blue-900x p-4">{children}</div>
       </div>
     </motion.div>
   );

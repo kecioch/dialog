@@ -14,11 +14,31 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String  @id @default(uuid())
+  email     String  @unique
   firstName String
   lastName  String
   password  String?
-  googleId  String?  @unique
+
+  googleId String?   @unique
+  passkeys Passkey[]
+
   createdAt DateTime @default(now())
+}
+
+model Passkey {
+  id     String @id @default(uuid())
+  userId String
+  name   String
+  user   User   @relation(fields: [userId], references: [id])
+
+  credentialId String   @unique // base64url encoded
+  publicKey    Bytes // COSE public key
+  counter      BigInt   @default(0)
+  deviceType   String // "singleDevice" | "multiDevice"
+  backedUp     Boolean  @default(false)
+  transports   String[] // ["internal", "hybrid", etc.]
+
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
 }

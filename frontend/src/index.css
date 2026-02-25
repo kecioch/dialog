@@ -34,6 +34,8 @@
   --bg-chatlist-search-input: var(--neutral-200);
   --bg-chatlist-selected: var(--neutral-150);
   --bg-chatlist-selected-active: var(--neutral-200);
+  --bg-listitem: var(--neutral-200);
+  --text-color-listitem: var(--neutral-500);
   --text-color-main: var(--neutral-500);
   --text-color-chatlist: var(--neutral-400);
   --text-color-chatlist-muted: var(--neutral-300);
@@ -54,6 +56,8 @@
   --bg-chatlist-search-input: var(--neutral-400);
   --bg-chatlist-selected: var(--neutral-400);
   --bg-chatlist-selected-active: var(--neutral-350);
+  --bg-listitem: var(--neutral-400);
+  --text-color-listitem: var(--neutral-200);
   --text-color-main: var(--neutral-100);
   --text-color-chatlist: var(--neutral-200);
   --text-color-chatlist-muted: var(--neutral-200);

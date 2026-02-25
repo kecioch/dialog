@@ -15,7 +15,7 @@ const Avatar = ({ name = "", rounded = false, className }: Props) => {
 
   return (
     <div
-      className={`h-10 aspect-square drop-shadow-l flex justify-center items-center
+      className={`h-10 aspect-square drop-shadow-l flex justify-center items-center select-none
         ${rounded ? "rounded-full" : "rounded-lg"}
         ${className}`}
       style={{

@@ -1,19 +1,24 @@
-import { Request, Router } from 'express';
+import { Router } from 'express';
 import { prisma } from '../lib/prisma';
 import bcrypt from 'bcrypt';
 import { signToken } from '../utils/jwt';
 import { requireAuth } from '../middleware/auth';
 import { OAuth2Client } from 'google-auth-library';
+import { asyncHandler } from '../middleware/asyncHandler';
 
 const googleClient = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-   "postmessage"
+  'postmessage',
 );
+
 const router = Router();
 
-router.get('/', requireAuth, async (req, res) => {
-  try {
+// GET /api/auth/ - Check user whether is logged in
+router.get(
+  '/',
+  requireAuth,
+  asyncHandler(async (req, res) => {
     const userId = req.user?.userId;
 
     const user = await prisma.user.findUnique({
@@ -30,23 +35,13 @@ router.get('/', requireAuth, async (req, res) => {
         lastName: user.lastName,
       },
     });
-  } catch (err) {
-    res.status(500);
-  }
-});
+  }),
+);
 
-router.get('/protected', requireAuth, async (req, res) => {
-  try {
-    const userId = req.user?.userId;
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(500);
-  }
-});
-
-router.post('/login', async (req, res) => {
-  try {
+// POST /api/auth/login - Standard login with email and password
+router.post(
+  '/login',
+  asyncHandler(async (req, res) => {
     let { email, password } = req.body;
 
     email = email?.trim().toLowerCase();
@@ -62,8 +57,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    // Issue JWT
     const token = signToken(user.id);
-
     res
       .cookie('token', token, {
         httpOnly: true,
@@ -78,18 +73,19 @@ router.post('/login', async (req, res) => {
           lastName: user.lastName,
         },
       });
-  } catch (err) {
-    res.status(500).json({ message: 'Error login' });
-  }
-});
+  }),
+);
 
+// POST /api/auth/logout - Logout
 router.post('/logout', (req, res) => {
   res.clearCookie('token');
   res.json({ message: 'Logged out' });
 });
 
-router.post('/register', async (req, res) => {
-  try {
+// POST /api/auth/register - Standard registration with email and password
+router.post(
+  '/register',
+  asyncHandler(async (req, res) => {
     let { email, firstName, lastName, password } = req.body;
 
     email = email?.trim().toLowerCase();
@@ -122,8 +118,8 @@ router.post('/register', async (req, res) => {
       },
     });
 
+    // Issue JWT
     const token = signToken(user.id);
-
     res
       .cookie('token', token, {
         httpOnly: true,
@@ -138,13 +134,13 @@ router.post('/register', async (req, res) => {
           lastName: user.lastName,
         },
       });
-  } catch (err) {
-    res.status(500).json({ message: 'Error registering new user' });
-  }
-});
+  }),
+);
 
-router.post('/google', async (req, res) => {
-  try {
+// GET /api/auth/google - Google authentication
+router.post(
+  '/google',
+  asyncHandler(async (req, res) => {
     const { code } = req.body; // ID token from frontend
 
     if (!code) {
@@ -155,10 +151,10 @@ router.post('/google', async (req, res) => {
     const { tokens } = await googleClient.getToken(code);
 
     if (!tokens.id_token) {
-      return res.status(400).json({ message: "No ID token received" });
+      return res.status(400).json({ message: 'No ID token received' });
     }
 
-     // Verify ID token
+    // Verify ID token
     const ticket = await googleClient.verifyIdToken({
       idToken: tokens.id_token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -198,10 +194,9 @@ router.post('/google', async (req, res) => {
         return res.status(403).json({ message: 'Google account mismatch' });
       }
     }
-
+    
     // Issue JWT
     const token = signToken(user.id);
-
     res
       .cookie('token', token, {
         httpOnly: true,
@@ -216,11 +211,7 @@ router.post('/google', async (req, res) => {
           lastName: user.lastName,
         },
       });
-  } catch (err) {
-    console.error(err);
-    res.status(401).json({ message: 'Google authentication failed' });
-  }
-});
+  }),
+);
 
-// router;
 export default router;

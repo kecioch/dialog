@@ -11,3 +11,13 @@ export type NewUser = {
   lastName: string;
   password: string;
 };
+
+export type Passkey = {
+  id: string;
+  name: string;
+  deviceType: string;
+  backedUp: boolean;
+  createdAt: string;
+  lastUsedAt: string | null;
+  transports: string[];
+};
