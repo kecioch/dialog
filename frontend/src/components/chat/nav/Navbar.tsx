@@ -11,6 +11,7 @@ import Avatar from "../Avatar";
 import ThemeSwitchButton from "./ThemeSwitchButton";
 import { useAuth } from "../../../hooks/useAuth";
 import { DrawerView } from "../drawer/Drawer";
+import { AnimatePresence } from "framer-motion";
 
 interface Props {
   className?: string;
@@ -30,27 +31,33 @@ const Navbar = ({ className, drawerView, onOpenDrawer }: Props) => {
     >
       <LogoSmall />
       <nav className="flex flex-col justify-center items-center gap-5 text-2xl">
-        <NavbarButton
-          icon={faMessage}
-          title="Chats"
-          active={drawerView === null}
-          onClick={() => onOpenDrawer(null)}
-        />
-        <NavbarButton
-          icon={faUserGroup}
-          title="Contacts"
-          active={drawerView === "contacts"}
-          onClick={() => onOpenDrawer("contacts")}
-        />
-        <div className="h-[1.5px] w-full bg-[var(--primary-700)]" />
-        <NavbarButton
-          icon={faGear}
-          title="Settings"
-          active={drawerView === "settings"}
-          onClick={() => onOpenDrawer("settings")}
-        />
-        <ThemeSwitchButton />
-        <NavbarButton icon={faSignOut} title="Logout" onClick={handleLogout} />
+        <AnimatePresence>
+          <NavbarButton
+            icon={faMessage}
+            title="Chats"
+            active={drawerView === null}
+            onClick={() => onOpenDrawer(null)}
+          />
+          <NavbarButton
+            icon={faUserGroup}
+            title="Contacts"
+            active={drawerView === "contacts"}
+            onClick={() => onOpenDrawer("contacts")}
+          />
+          <div className="h-[1.5px] w-full bg-[var(--primary-700)]" />
+          <NavbarButton
+            icon={faGear}
+            title="Settings"
+            active={drawerView === "settings"}
+            onClick={() => onOpenDrawer("settings")}
+          />
+          <ThemeSwitchButton />
+          <NavbarButton
+            icon={faSignOut}
+            title="Logout"
+            onClick={handleLogout}
+          />
+        </AnimatePresence>
       </nav>
       <Avatar
         className="border-[1.5px] border-[var(--secondary-500)] drop-shadow-lg"
