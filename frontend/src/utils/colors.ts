@@ -5,7 +5,7 @@ export function getColorBasedOnText(text: string) {
     hash = text.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  // Map hash → hue (0–360)
+  // Map hash -> hue (0–360)
   const hue = Math.abs(hash) % 360;
 
   // Fixed saturation + lightness for consistent look

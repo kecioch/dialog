@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Navbar from "../components/chat/nav/Navbar";
 import ChatList from "../components/chat/ChatList";
 import Chat from "../components/chat/Chat";
+import Drawer, { DrawerView } from "../components/chat/drawer/Drawer";
+import { AnimatePresence } from "framer-motion";
+import DrawerSettings from "../components/chat/drawer/DrawerSettings";
+import DrawerContacts from "../components/chat/drawer/DrawerContacts";
 
 export const USER_ID = "007";
 
@@ -162,6 +166,7 @@ const CHAT_DATA: ChatData[] = [
 const Home = () => {
   const [chats, setChats] = useState<ChatData[]>(CHAT_DATA);
   const [selectedChatIndex, setSelectedChatIndex] = useState<number>();
+  const [drawerView, setDrawerView] = useState<DrawerView>(null);
 
   const handleSelectChat = (index: number) => setSelectedChatIndex(index);
 
@@ -173,19 +178,36 @@ const Home = () => {
     );
   };
 
+  const handleCloseDrawer = () => setDrawerView(null);
+
   return (
     <div className="w-full h-screen flex from-[var(--bg-gradient-from)] to-[var(--bg-gradient-to)] bg-gradient-to-br theme-transition">
-      <Navbar className="min-w-[4em]" />
-      <main className="flex-1 bg-[var(--bg-chatlist)] rounded-l-3xl flex py-10 pr-8 min-w-0 theme-transition">
-        <ChatList
-          className="min-w-[20em] w-[20%] text-[var(--text-color-chatlist)]"
-          chats={chats}
-          selectedChatIndex={selectedChatIndex}
-          onSelect={handleSelectChat}
-          onSearch={handleSearchChat}
-        />
+      <Navbar
+        className="min-w-[4em]"
+        drawerView={drawerView}
+        onOpenDrawer={(view) => setDrawerView(view)}
+      />
+      <main className="isolate relative flex-1 bg-[var(--bg-chatlist)] rounded-l-3xl flex pr-8 min-w-0 min-h-0 theme-transition">
+        <div className="relative min-w-[20em] w-[20%] text-[var(--text-color-chatlist)] overflow-hidden py-10">
+          <ChatList
+            className="max-h-full"
+            chats={chats}
+            selectedChatIndex={selectedChatIndex}
+            onSelect={handleSelectChat}
+            onSearch={handleSearchChat}
+          />
+
+          <AnimatePresence>
+            {drawerView === "contacts" && (
+              <DrawerContacts onClose={handleCloseDrawer} />
+            )}
+            {drawerView === "settings" && (
+              <DrawerSettings onClose={handleCloseDrawer} />
+            )}
+          </AnimatePresence>
+        </div>
         <Chat
-          className="flex-1 min-w-0"
+          className="flex-1 min-w-0 my-10"
           data={
             selectedChatIndex !== undefined
               ? CHAT_DATA[selectedChatIndex]
