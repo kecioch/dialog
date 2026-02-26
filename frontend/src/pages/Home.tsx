@@ -43,7 +43,7 @@ const Home = () => {
       setSelectedContact(contact);
       setSelectedChat(undefined);
     }
-    setDrawerView(null); // optionally close drawer
+    setDrawerView(null);
   };
 
   const handleChatCreated = (newChat: ChatData) => {

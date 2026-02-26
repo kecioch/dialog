@@ -41,7 +41,7 @@ const ChatList = ({
   };
 
   return (
-    <section className={`py-3 pb-0 flex flex-col ${className}`}>
+    <section className={`py-3 min-w-0 pb-0 flex flex-col ${className}`}>
       <div className="px-3">
         <h1 className="text-4xl uppercase text-center mb-7">Chats</h1>
         <Searchbar onSearch={handleSearchChat} />
@@ -52,7 +52,7 @@ const ChatList = ({
       ) : (
         <motion.ul
           layout
-          className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col gap-2 px-3"
+          className="flex-1 w-full min-w-0 overflow-y-auto overflow-x-hidden flex flex-col gap-2 px-3"
         >
           <AnimatePresence>
             {chatList.map((el, i) => (

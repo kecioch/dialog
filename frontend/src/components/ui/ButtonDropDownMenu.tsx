@@ -4,6 +4,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface MenuItem {
   label: string;
@@ -41,38 +42,46 @@ const ButtonDropdownMenu = ({ items, className }: Props) => {
         activeScale={false}
         onClick={handleOpen}
       />
-      {open &&
-        createPortal(
-          <>
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setOpen(false)}
-            />
-            <div
-              className="fixed z-50 min-w-[10rem] rounded-xl drop-shadow-xl overflow-hidden flex flex-col"
-              style={{ top: pos.top, right: pos.right }}
-            >
-              {items.map((item, i) => (
-                <button
-                  key={i}
-                  className={`text-left px-4 py-3 transition-colors duration-150
+      {createPortal(
+        <AnimatePresence>
+          {open && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setOpen(false)}
+              />
+              <motion.div
+                className="fixed z-50 min-w-[10rem] rounded-xl drop-shadow-xl overflow-hidden flex flex-col"
+                style={{ top: pos.top, right: pos.right }}
+                initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+              >
+                {items.map((item, i) => (
+                  <button
+                    key={i}
+                    className={`text-left px-4 py-3 transition-colors duration-150
                     ${
                       item.danger
                         ? "bg-red-700 text-[var(--neutral-500)] font-normal hover:bg-red-600 "
                         : "bg-[var(--bg-dropdown)] text-[var(--text-color-main)]  hover:bg-[var(--bg-dropdown-hover)]"
                     }`}
-                  onClick={() => {
-                    setOpen(false);
-                    item.onClick();
-                  }}
-                >
-                  <FontAwesomeIcon icon={item.icon} /><span className="ml-2">{item.label}</span>
-                </button>
-              ))}
-            </div>
-          </>,
-          document.body,
-        )}
+                    onClick={() => {
+                      setOpen(false);
+                      item.onClick();
+                    }}
+                  >
+                    <FontAwesomeIcon icon={item.icon} />
+                    <span className="ml-2">{item.label}</span>
+                  </button>
+                ))}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 };
