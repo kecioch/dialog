@@ -6,176 +6,56 @@ import { DrawerView } from "../components/chat/drawer/Drawer";
 import { AnimatePresence } from "framer-motion";
 import DrawerSettings from "../components/chat/drawer/DrawerSettings";
 import DrawerContacts from "../components/chat/drawer/DrawerContacts";
-
-export const USER_ID = "007";
-
-export interface ChatMessageData {
-  from: string;
-  date: Date;
-  text: string;
-  read: boolean;
-}
-
-export interface ChatData {
-  //   id: string;
-  name: string;
-  messages: ChatMessageData[];
-}
-
-const CHAT_DATA: ChatData[] = [
-  {
-    name: "Albert Flores",
-    messages: [
-      {
-        from: "001",
-        date: new Date("01-01-2026"),
-        text: "Hello! 👍",
-        read: true,
-      },
-    ],
-  },
-  {
-    name: "Ronald Richards",
-    messages: [
-      { from: "002", date: new Date(), text: "This is cool!", read: true },
-      { from: USER_ID, date: new Date(), text: "Yes it is!", read: true },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-      { from: "002", date: new Date(), text: "Whats Jim doing?", read: false },
-    ],
-  },
-  {
-    name: "Joachim Stein",
-    messages: [
-      {
-        from: "003",
-        date: new Date("01-01-2026"),
-        text: "Whats Up!",
-        read: true,
-      },
-    ],
-  },
-  {
-    name: "Bilbo Beutlin",
-    messages: [
-      {
-        from: "004",
-        date: new Date("01-01-2026"),
-        text: "You want going to Mordor? I need a Partner. You want going to Mordor? I need a Partner. You want going to Mordor? I need a Partner",
-        read: true,
-      },
-      {
-        from: USER_ID,
-        date: new Date("01-01-2026"),
-        text: "I dont know.",
-        read: true,
-      },
-      {
-        from: USER_ID,
-        date: new Date("01-01-2026"),
-        text: "Isnt it dangerous? I think its too dangerous.",
-        read: true,
-      },
-      {
-        from: "004",
-        date: new Date("01-01-2026"),
-        text: "Noooooo, trust me. You can trust me bro. Sauron isnt waiting",
-        read: false,
-      },
-    ],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-  {
-    name: "Heinrich Jim",
-    messages: [],
-  },
-];
+import { ChatData, Contact } from "../types/chat";
+import { useChatList } from "../hooks/useChatList";
 
 const Home = () => {
-  const [chats, setChats] = useState<ChatData[]>(CHAT_DATA);
-  const [selectedChatIndex, setSelectedChatIndex] = useState<number>();
+  const {
+    chats,
+    loading,
+    error,
+    updateLastMessage,
+    markAsRead,
+    deleteChat,
+    addNewChat,
+  } = useChatList();
+  const [selectedChat, setSelectedChat] = useState<ChatData>();
+  const [selectedContact, setSelectedContact] = useState<Contact>();
   const [drawerView, setDrawerView] = useState<DrawerView>(null);
 
-  const handleSelectChat = (index: number) => setSelectedChatIndex(index);
+  const handleSelectChat = (chat: ChatData) => {
+    setSelectedChat(chat);
+    setSelectedContact(undefined);
+    // Clear unread messages
+    markAsRead(chat.id);
+  };
 
-  const handleSearchChat = (text: string) => {
-    setChats(
-      CHAT_DATA.filter((el) =>
-        el.name.toLowerCase().includes(text.toLocaleLowerCase()),
-      ),
+  const handleSelectContact = (contact: Contact) => {
+    const existingChat = chats.find((chat) =>
+      chat.users.some((u) => u.user.id === contact.id),
     );
+    if (existingChat) {
+      setSelectedChat(existingChat);
+      setSelectedContact(undefined);
+      // Clear unread messages
+      markAsRead(existingChat.id);
+    } else {
+      setSelectedContact(contact);
+      setSelectedChat(undefined);
+    }
+    setDrawerView(null); // optionally close drawer
+  };
+
+  const handleChatCreated = (newChat: ChatData) => {
+    addNewChat(newChat);
+    setSelectedChat(newChat);
+    setSelectedContact(undefined);
+  };
+
+  const handleDeleteChat = (chatId: string) => {
+    deleteChat(chatId);
+    setSelectedChat(undefined);
+    setSelectedContact(undefined);
   };
 
   const handleCloseDrawer = () => setDrawerView(null);
@@ -188,18 +68,22 @@ const Home = () => {
         onOpenDrawer={(view) => setDrawerView(view)}
       />
       <main className="isolate relative flex-1 bg-[var(--bg-chatlist)] rounded-l-3xl flex pr-8 min-w-0 min-h-0 theme-transition">
-        <div className="relative min-w-[20em] w-[20%] text-[var(--text-color-chatlist)] overflow-hidden py-10">
+        <div className="relative min-w-[20em] w-[20%] text-[var(--text-color-chatlist)] overflow-hidden py-10 flex">
           <ChatList
+            data={chats}
+            loading={loading === "loadingChats"}
+            error={error}
             className="max-h-full"
-            chats={chats}
-            selectedChatIndex={selectedChatIndex}
+            selectedChat={selectedChat}
             onSelect={handleSelectChat}
-            onSearch={handleSearchChat}
           />
 
           <AnimatePresence>
             {drawerView === "contacts" && (
-              <DrawerContacts onClose={handleCloseDrawer} />
+              <DrawerContacts
+                onClose={handleCloseDrawer}
+                onSelectContact={handleSelectContact}
+              />
             )}
             {drawerView === "settings" && (
               <DrawerSettings onClose={handleCloseDrawer} />
@@ -208,11 +92,11 @@ const Home = () => {
         </div>
         <Chat
           className="flex-1 min-w-0 my-10"
-          data={
-            selectedChatIndex !== undefined
-              ? CHAT_DATA[selectedChatIndex]
-              : undefined
-          }
+          chatData={selectedChat}
+          contactData={selectedContact}
+          onChatCreated={handleChatCreated}
+          onMessageSent={updateLastMessage}
+          onDeleteChat={handleDeleteChat}
         />
       </main>
     </div>

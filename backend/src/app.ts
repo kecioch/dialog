@@ -2,6 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import authRoutes from './routes/authRoutes';
 import passkeyRoutes from './routes/passkeyRoutes';
+import chatRoutes from './routes/chatRoutes';
 import { errorHandler } from './utils/errorHandler';
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/passkeys', passkeyRoutes);
+app.use('/api', chatRoutes);
 app.use(errorHandler);
 
 export default app;

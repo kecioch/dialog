@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { NewUser, Passkey, User } from "../types/Auth";
+import { NewUser, Passkey, User } from "../types/auth";
 
 type AuthContextType = {
   user: User | null;

@@ -23,7 +23,7 @@ const Drawer = ({ children, title, onClose }: Props) => {
         <IconButton icon={faX} className="text-xl" onClick={onClose} />
       </div>
       <div className="h-full pb-24 flex flex-col bg-red-950x">
-        <h2 className="text-3xl uppercase text-center mb-7">{title}</h2>
+        <h2 className="text-3xl uppercase text-center mb-4">{title}</h2>
         <div className="flex-1 overflow-y-auto overflow-x-hidden bg-blue-900x p-4">{children}</div>
       </div>
     </motion.div>

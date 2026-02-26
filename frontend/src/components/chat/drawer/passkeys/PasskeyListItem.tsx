@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Passkey } from "../../../../types/Auth";
+import { Passkey } from "../../../../types/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloud, faKey, faTrash } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "../../../ui/IconButton";

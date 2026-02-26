@@ -1,46 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChatListItem from "./ChatListItem";
-import { ChatData } from "../../pages/Home";
 import Searchbar from "./Searchbar";
-import { useAuth } from "../../hooks/useAuth";
 import MutedTextHeading from "../ui/MutedTextHeading";
+import { ChatData } from "../../types/chat";
+import { useAuth } from "../../hooks/useAuth";
+import { getChatName } from "../../utils/chat";
+import Spinner from "../ui/Spinner";
+import ErrorText from "../ui/ErrorText";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
-  chats: ChatData[];
+  data: ChatData[];
+  loading?: boolean;
+  error?: string | null;
   className?: string;
-  selectedChatIndex?: number;
-  onSelect: (index: number) => void;
-  onSearch: (text: string) => void;
+  selectedChat?: ChatData;
+  onSelect: (chat: ChatData) => void;
 }
 
 const ChatList = ({
-  chats,
+  data,
+  loading = false,
+  error,
   className,
-  selectedChatIndex,
+  selectedChat,
   onSelect,
-  onSearch,
 }: Props) => {
   const { user } = useAuth();
+  const [chatList, setChatList] = useState<ChatData[]>([]);
+
+  useEffect(() => setChatList([...data]), [data]);
+
+  const handleSearchChat = (text: string) => {
+    setChatList(
+      data.filter((el) => {
+        const chatName = user ? getChatName(el, user?.id) : "";
+        return chatName.toLowerCase().includes(text.toLocaleLowerCase());
+      }),
+    );
+  };
+
   return (
     <section className={`py-3 pb-0 flex flex-col ${className}`}>
       <div className="px-3">
         <h1 className="text-4xl uppercase text-center mb-7">Chats</h1>
-        <Searchbar onSearch={onSearch} />
-        <p className="text-center mb-8">Hello, {user?.firstName} !</p>
+        <Searchbar onSearch={handleSearchChat} />
       </div>
-      {chats.length > 0 ? (
-        <ul className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col gap-2 px-3">
-          {chats.map((el, i) => (
-            <ChatListItem
-              key={i}
-              data={el}
-              selected={i === selectedChatIndex}
-              onClick={() => onSelect(i)}
-            />
-          ))}
-        </ul>
+      {error && <ErrorText className="px-3 mb-3">{error}</ErrorText>}
+      {loading ? (
+        <Spinner />
       ) : (
-        <MutedTextHeading>Looks empty here!</MutedTextHeading>
+        <motion.ul
+          layout
+          className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col gap-2 px-3"
+        >
+          <AnimatePresence>
+            {chatList.map((el, i) => (
+              <ChatListItem
+                key={i}
+                data={el}
+                selected={el.id === selectedChat?.id}
+                onClick={() => onSelect(el)}
+              />
+            ))}
+
+            {chatList.length <= 0 && (
+              <MutedTextHeading>Looks empty here!</MutedTextHeading>
+            )}
+          </AnimatePresence>
+        </motion.ul>
       )}
     </section>
   );

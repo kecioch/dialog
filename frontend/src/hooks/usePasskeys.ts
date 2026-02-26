@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Passkey } from "../types/Auth";
+import { Passkey } from "../types/auth";
 import { useAuth } from "./useAuth";
 
 export type PasskeysLoadingState =

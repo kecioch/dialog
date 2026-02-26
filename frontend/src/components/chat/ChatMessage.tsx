@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatMessageData } from "../../pages/Home";
+import { ChatMessageData } from "../../types/chat";
 
 interface Props {
   data: ChatMessageData;
@@ -16,7 +16,7 @@ const ChatMessage = ({ data, isOwn }: Props) => {
         >
           <p>{data.text}</p>
         </div>
-        <p className="text-xs px-2 pt-1">{data.date.toLocaleString()}</p>
+        <p className="text-xs px-2 pt-1">{data.createdAt.toLocaleString()}</p>
       </div>
     </div>
   );
