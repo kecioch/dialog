@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../lib/api";
 import { ChatData, ChatMessageData } from "../types/chat";
+import { useSocket } from "./useSocket";
 
 type loadingState = null | "loadingChats" | "openingChat" | "deletingChat";
 
@@ -33,6 +34,42 @@ export function useChatList() {
       })
       .finally(() => setLoading(null));
   }, []);
+
+  /*
+  ##############################################################
+    SOCKET HANDLERS
+  ##############################################################
+  */
+
+  const handleIncomingMessage = (chatId: string, message: ChatMessageData) => {
+    setChats((prev) =>
+      prev.map((c) =>
+        c.id === chatId
+          ? { ...c, lastMessage: message, unreadCount: c.unreadCount + 1 }
+          : c,
+      ),
+    );
+  };
+
+  const handleNewChat = (chat: ChatData) => {
+    // Handles both new chats and chats restored after soft-delete
+    setChats((prev) => {
+      const exists = prev.some((c) => c.id === chat.id);
+      if (exists) return prev; // Already handled by new_message -> do nothing
+      return [{ ...chat, unreadCount: 1 }, ...prev]; // Only add if new/restored
+    });
+  };
+
+  useSocket({
+    onNewMessage: handleIncomingMessage,
+    onNewChat: handleNewChat,
+  });
+
+  /*
+  ##############################################################
+    HELPER FUNCTIONS
+  ##############################################################
+  */
 
   const deleteChat = (chatId: string) => {
     setLoading("deletingChat");

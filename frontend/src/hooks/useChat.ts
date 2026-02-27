@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChatData, ChatMessageData } from "../types/chat";
 import api from "../lib/api";
+import { getSocket } from "../lib/socket";
 
 type loadingState = null | "loadingMessages" | "sendingMessage";
 
@@ -37,6 +38,29 @@ export function useChat(
         setError("Failed to load messages");
       })
       .finally(() => setLoading(null));
+  }, [chatId]);
+
+  // Listen for incoming messages on the active chat
+  useEffect(() => {
+    if (!chatId) return;
+
+    const socket = getSocket();
+
+    function handleNewMessage(payload: {
+      chatId: string;
+      message: ChatMessageData;
+    }) {
+      if (payload.chatId !== chatId) return;
+      setMessages((prev) => [
+        ...prev,
+        { ...payload.message, createdAt: new Date(payload.message.createdAt) },
+      ]);
+    }
+
+    socket.on("new_message", handleNewMessage);
+    return () => {
+      socket.off("new_message", handleNewMessage);
+    };
   }, [chatId]);
 
   const sendMessage = async (text: string) => {

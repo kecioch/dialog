@@ -37,11 +37,13 @@
     "@simplewebauthn/server": "^13.2.3",
     "@types/morgan": "^1.9.10",
     "bcrypt": "^6.0.0",
+    "cookie": "^1.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express-session": "^1.19.0",
     "google-auth-library": "^10.5.0",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "socket.io": "^4.8.3"
   }
 }
