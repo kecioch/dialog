@@ -2,10 +2,8 @@ import React, { useCallback, useState } from "react";
 import Avatar from "./Avatar";
 import IconButton from "../ui/IconButton";
 import {
-  faEllipsisVertical,
   faPaperclip,
   faPaperPlane,
-  faSearch,
   faSmile,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +15,7 @@ import { getChatName } from "../../utils/chat";
 import Spinner from "../ui/Spinner";
 import ButtonDropdownMenu from "../ui/ButtonDropDownMenu";
 import { useNotificationSound } from "../../hooks/useNotificationSound";
+import EmojiPickerButton from "../ui/EmojiPicker";
 
 interface Props {
   chatData: ChatData | undefined;
@@ -65,6 +64,10 @@ const Chat = ({
     }
   };
 
+  const handleEmojiSelect = (emoji: string) => {
+    setMessageText((prev) => (prev ?? "") + emoji);
+  };
+
   const chatBoxRefScrollCallback = useCallback(
     (el: HTMLDivElement | null) => {
       if (el) {
@@ -84,11 +87,6 @@ const Chat = ({
             <div className="h-16 w-full bg-[var(--bg-chat-header)] rounded-xl drop-shadow-md flex items-center justify-between gap-3 p-2 pr-4 ">
               <Avatar className="h-full" name={chatName} />
               <p className="flex-1 text-lg">{chatName}</p>
-              <IconButton
-                icon={faSearch}
-                className="text-xl"
-                activeScale={false}
-              />
               <ButtonDropdownMenu
                 items={[
                   {
@@ -128,16 +126,12 @@ const Chat = ({
                 onKeyDown={handleKeyDown}
               />
               <div className="flex gap-1">
-                <IconButton
-                  icon={faSmile}
-                  title="Emoji"
-                  className="text-[var(--text-color-muted)] active:text-[var(--text-color-muted-active)]"
-                />
-                <IconButton
+                <EmojiPickerButton onSelect={handleEmojiSelect} />
+                {/* <IconButton
                   icon={faPaperclip}
                   title="Attach file"
                   className="text-[var(--text-color-muted)] active:text-[var(--text-color-muted-active)]"
-                />
+                /> */}
                 <IconButton
                   icon={faPaperPlane}
                   title="Send"
