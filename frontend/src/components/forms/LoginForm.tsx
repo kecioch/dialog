@@ -17,6 +17,7 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
     login(email, password)
       .catch((err) => {
         setError("Login failed");

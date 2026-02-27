@@ -1,4 +1,7 @@
-import React from "react";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
+import IconButton from "../ui/IconButton";
 
 interface Props {
   id: string;
@@ -25,32 +28,45 @@ const FormInput = ({
   disabled = false,
   onChange,
 }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
+  const resolvedType = isPassword ? (showPassword ? "text" : "password") : type;
+
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`relative ${className}`}>
+      <input
+        id={id}
+        type={resolvedType}
+        value={value}
+        className={`peer w-full bg-transparent border-b-[0.1em] p-2 pb-1 pt-5 text-[var(--neutral-500)] focus:border-[var(--primary-300)] focus:outline-none placeholder-transparent 
+          isPassword ? "pr-10" : ""
+          ${error ? "border-red-700 text-red-700" : "border-[var(--primary-700)]"}`}
+        placeholder={placeholder}
+        disabled={disabled}
+        required={required}
+        onChange={onChange}
+      />
       <label
         htmlFor={id}
-        className={error ? "text-red-700" : "text-[var(--neutral-500)]"}
+        className={`absolute pointer-events-none left-2 top-4 transition-all duration-200 uppercase
+          peer-focus:top-0 peer-focus:text-xs peer-focus:text-[var(--primary-300)]
+          peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs
+          ${error ? "text-red-700" : "text-[var(--primary-700)]"}
+        `}
       >
         {children}
       </label>
-      <input
-        id={id}
-        placeholder={placeholder}
-        type={type}
-        value={value}
-        required={required}
-        onChange={onChange}
-        disabled={disabled}
-        className={`border-[1.5px] rounded-lg p-3 text-[var(--neutral-500)]
-              ${
-                error
-                  ? "bg-red-300 border-red-700"
-                  : "bg-[var(--neutral-150)] border-[var(--primary-500)]"
-              }
-              focus:border-[var(--secondary-300)]
-              outline-none placeholder-[var(--neutral-300)]
-              `}
-      />
+
+      {isPassword && (
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-2 top-4 text-[var(--neutral-300)] active:text-[var(--primary-500)] transition-colors"
+          tabIndex={-1}
+        >
+          <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+        </button>
+      )}
     </div>
   );
 };

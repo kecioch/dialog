@@ -16,12 +16,15 @@ const SignupForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ErrorAPI | null>(null);
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    if (honeypot.length > 0) return;
     setIsLoading(true);
+    setError(null);
     register({ email, firstName, lastName, password })
       .catch((err) => {
         setError(err);
@@ -44,7 +47,6 @@ const SignupForm = () => {
           <FormInput
             id="firstName"
             placeholder="First Name..."
-            className="w-[45%] flex-1"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             disabled={isLoading}
@@ -55,7 +57,6 @@ const SignupForm = () => {
           <FormInput
             id="lastName"
             placeholder="Last Name..."
-            className="w-[45%] flex-1"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             disabled={isLoading}
@@ -87,6 +88,23 @@ const SignupForm = () => {
         >
           Password
         </FormInput>
+
+        {/* Honeypot - hidden from real users */}
+        <div
+          aria-hidden="true"
+          className="absolute -left-[9999px] -top-[9999px] overflow-hidden"
+        >
+          <label htmlFor="mel">Mel</label>
+          <input
+            id="mel"
+            name="mel"
+            type="text"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         {error && <p className="text-red-700 mt-2 text-sm">{error.message}</p>}
         <Button className="mt-4 w-full" isLoading={isLoading} fill>
           Create Account
