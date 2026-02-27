@@ -4,10 +4,8 @@ import IconButton from "../ui/IconButton";
 import {
   faPaperclip,
   faPaperPlane,
-  faSmile,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import ChatMessage from "./ChatMessage";
 import { ChatData, ChatMessageData, Contact } from "../../types/chat";
 import { useAuth } from "../../hooks/useAuth";
 import { useChat } from "../../hooks/useChat";
@@ -16,6 +14,7 @@ import Spinner from "../ui/Spinner";
 import ButtonDropdownMenu from "../ui/ButtonDropDownMenu";
 import { useNotificationSound } from "../../hooks/useNotificationSound";
 import EmojiPickerButton from "../ui/EmojiPicker";
+import ChatMessageList from "./ChatMessageList";
 
 interface Props {
   chatData: ChatData | undefined;
@@ -101,18 +100,12 @@ const Chat = ({
           </div>
           <div
             ref={chatBoxRefScrollCallback}
-            className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-7 pr-4"
+            className="flex-1 overflow-y-auto overflow-x-hidden pr-4"
           >
             {loading === "loadingMessages" ? (
               <Spinner />
             ) : (
-              messages.map((el, i) => (
-                <ChatMessage
-                  key={i}
-                  data={el}
-                  isOwn={el.from.id === user?.id}
-                />
-              ))
+              <ChatMessageList data={messages} />
             )}
           </div>
           <div className="pr-4">

@@ -7,6 +7,11 @@ interface Props {
 }
 
 const ChatMessage = ({ data, isOwn }: Props) => {
+  const timeString = data.createdAt.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
     <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
       <div className="max-w-full lg:max-w-[50%] xl:max-w-[60%]">
@@ -16,7 +21,9 @@ const ChatMessage = ({ data, isOwn }: Props) => {
         >
           <p className="break-words whitespace-pre-wrap">{data.text}</p>
         </div>
-        <p className="text-xs px-2 pt-1">{data.createdAt.toLocaleString()}</p>
+        <p className={`text-xs px-2 pt-1 ${isOwn ? "text-end" : "text-start"}`}>
+          {timeString}
+        </p>
       </div>
     </div>
   );

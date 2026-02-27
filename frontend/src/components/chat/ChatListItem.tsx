@@ -4,6 +4,7 @@ import { ChatData } from "../../types/chat";
 import { useAuth } from "../../hooks/useAuth";
 import { getChatName } from "../../utils/chat";
 import { motion } from "framer-motion";
+import { formatLastMessageDate } from "../../utils/datetime";
 
 interface Props {
   data: ChatData;
@@ -15,6 +16,9 @@ const ChatListItem = ({ data, selected = false, onClick }: Props) => {
   const { user } = useAuth();
 
   const chatName = user ? getChatName(data, user?.id) : "";
+  const lastMessageDateString = data.lastMessage
+    ? formatLastMessageDate(data.lastMessage.createdAt)
+    : "";
 
   return (
     <motion.li
@@ -46,7 +50,7 @@ const ChatListItem = ({ data, selected = false, onClick }: Props) => {
         </div>
         <div className="h-full text-sm text-right pr-1 flex flex-col justify-start items-end gap-1">
           <p className="text-sm text-[var(--text-color-chatlist-time)]">
-            {data.lastMessage?.createdAt.toLocaleDateString()}
+            {lastMessageDateString}
           </p>
           {data.unreadCount > 0 && (
             <span className="bg-[var(--accent-500)] text-[var(--neutral-100)] py-[2px] px-[8px] rounded-md font-semibold">
