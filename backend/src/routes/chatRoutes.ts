@@ -246,6 +246,19 @@ router.post('/chats/:chatId/messages', requireAuth, async (req, res) => {
   res.status(201).json(message);
 });
 
+// PATCH /chats/:chatId/read - Mark all messages in chat as read
+router.patch('/chats/:chatId/read', requireAuth, asyncHandler(async (req, res) => {
+  const chatId = req.params.chatId as string;
+  const userId = req.user!.userId;
+
+  await prisma.chatMessage.updateMany({
+    where: { chatId, fromId: { not: userId }, read: false },
+    data: { read: true },
+  });
+
+  res.sendStatus(204);
+}));
+
 // DELETE /chats/:chatId - Soft delete and hard delete if both users deleted
 router.delete('/chats/:chatId', requireAuth, async (req, res) => {
   const chatId = req.params.chatId as string;

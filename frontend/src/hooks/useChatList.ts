@@ -97,6 +97,9 @@ export function useChatList() {
     setChats((prev) =>
       prev.map((c) => (c.id === chatId ? { ...c, unreadCount: 0 } : c)),
     );
+    api.patch(`/chats/${chatId}/read`).catch(() => {
+      // silently fail unread count is not critical
+    });
   };
 
   return {
