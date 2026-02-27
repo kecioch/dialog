@@ -7,9 +7,18 @@ import { useNotificationSound } from "./useNotificationSound";
 interface SocketHandlers {
   onNewMessage: (chatId: string, message: ChatMessageData) => void;
   onNewChat: (chat: ChatData) => void;
+  onUserStatus: (
+    userId: string,
+    online: boolean,
+    lastSeen: string | null,
+  ) => void;
 }
 
-export function useSocket({ onNewMessage, onNewChat }: SocketHandlers) {
+export function useSocket({
+  onNewMessage,
+  onNewChat,
+  onUserStatus,
+}: SocketHandlers) {
   const { user } = useAuth();
   const { playSound } = useNotificationSound();
 
@@ -42,12 +51,22 @@ export function useSocket({ onNewMessage, onNewChat }: SocketHandlers) {
       });
     }
 
+    function handleUserStatus(payload: {
+      userId: string;
+      online: boolean;
+      lastSeen: string | null;
+    }) {
+      onUserStatus(payload.userId, payload.online, payload.lastSeen);
+    }
+
     socket.on("new_message", handleNewMessage);
     socket.on("new_chat", handleNewChat);
+    socket.on("user_status", handleUserStatus);
 
     return () => {
       socket.off("new_message", handleNewMessage);
       socket.off("new_chat", handleNewChat);
+      socket.off("user_status", handleUserStatus);
       disconnectSocket();
     };
   }, [user]);

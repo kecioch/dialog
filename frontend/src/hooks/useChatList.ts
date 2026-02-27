@@ -60,9 +60,25 @@ export function useChatList() {
     });
   };
 
+  const handleUserStatus = (
+    userId: string,
+    online: boolean,
+    lastSeen: string | null,
+  ) => {
+    setChats((prev) =>
+      prev.map((c) => ({
+        ...c,
+        users: c.users.map((u) =>
+          u.user.id === userId ? { ...u, online, lastSeen } : u,
+        ),
+      })),
+    );
+  };
+
   useSocket({
     onNewMessage: handleIncomingMessage,
     onNewChat: handleNewChat,
+    onUserStatus: handleUserStatus,
   });
 
   /*

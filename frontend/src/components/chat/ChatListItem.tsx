@@ -20,6 +20,9 @@ const ChatListItem = ({ data, selected = false, onClick }: Props) => {
     ? formatLastMessageDate(data.lastMessage.createdAt)
     : "";
 
+  const isOnline =
+    data.users.find((u) => u.user.id !== user?.id)?.online ?? false;
+
   return (
     <motion.li
       className="flex"
@@ -41,7 +44,12 @@ const ChatListItem = ({ data, selected = false, onClick }: Props) => {
             ${selected && "bg-[var(--bg-chatlist-selected)]"}`}
         onClick={onClick}
       >
-        <Avatar className="h-full" name={chatName} />
+        <Avatar
+          className="h-full"
+          name={chatName}
+          isOnline={isOnline}
+          showOnlineIndicator
+        />
         <div className="flex-1 h-full flex flex-col justify-start item-start text-start min-w-0">
           <p className="font-normal truncate">{chatName}</p>
           <p className="font-light text-sm text-[var(--text-color-chatlist-muted)] truncate">

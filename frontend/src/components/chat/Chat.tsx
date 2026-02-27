@@ -6,7 +6,12 @@ import {
   faPaperPlane,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { ChatData, ChatMessageData, Contact } from "../../types/chat";
+import {
+  ChatData,
+  ChatMessageData,
+  ChatUserData,
+  Contact,
+} from "../../types/chat";
 import { useAuth } from "../../hooks/useAuth";
 import { useChat } from "../../hooks/useChat";
 import { getChatName } from "../../utils/chat";
@@ -16,11 +21,13 @@ import { useNotificationSound } from "../../hooks/useNotificationSound";
 import EmojiPickerButton from "../ui/EmojiPicker";
 import ChatMessageList from "./ChatMessageList";
 import ErrorText from "../ui/ErrorText";
+import { formatLastSeen } from "../../utils/datetime";
 
 interface Props {
   chatData: ChatData | undefined;
   contactData: Contact | undefined;
   className?: string;
+  otherUser?: ChatUserData;
   onChatCreated: (newChatData: ChatData) => void;
   onMessageSent: (chatId: string, message: ChatMessageData) => void;
   onDeleteChat: (chatId: string) => void;
@@ -30,6 +37,7 @@ const Chat = ({
   chatData,
   contactData,
   className,
+  otherUser,
   onChatCreated,
   onMessageSent,
   onDeleteChat,
@@ -77,6 +85,9 @@ const Chat = ({
     [messages],
   );
 
+  const isOnline = otherUser?.online ?? false;
+  const lastSeen = otherUser?.lastSeen ?? null;
+
   return (
     <section
       className={`bg-[var(--bg-chat)] theme-transition text-[var(--text-color-main)] rounded-xl p-4 pr-0 flex flex-col gap-5 ${className}`}
@@ -86,7 +97,15 @@ const Chat = ({
           <div className="pr-4">
             <div className="h-16 w-full bg-[var(--bg-chat-header)] rounded-xl drop-shadow-md flex items-center justify-between gap-3 p-2 pr-4 ">
               <Avatar className="h-full" name={chatName} />
-              <p className="flex-1 text-lg">{chatName}</p>
+              <div className="flex-1 flex flex-col justify-center min-w-0">
+                <p className="text-lg leading-tight">{chatName}</p>
+                <p
+                  className={`text-xs leading-tight transition-colors duration-300
+                             ${isOnline ? "text-green-400" : "text-[var(--text-color-muted)]"}`}
+                >
+                  {isOnline ? "Online" : formatLastSeen(lastSeen)}
+                </p>
+              </div>
               <ButtonDropdownMenu
                 items={[
                   {

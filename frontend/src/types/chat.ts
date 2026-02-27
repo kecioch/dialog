@@ -8,6 +8,8 @@ export interface ChatMessageData {
 
 export interface ChatUserData {
   user: { id: string; firstName: string; lastName: string };
+  online?: boolean;
+  lastSeen?: string | null;
 }
 
 export interface ChatData {
@@ -18,8 +20,10 @@ export interface ChatData {
 }
 
 export interface Contact {
-  id: string,
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
+  online?: boolean;
+  lastSeen?: string | null;
 }

@@ -25,7 +25,8 @@ model User {
 
   createdAt DateTime @default(now())
 
-  chats    ChatUser[]
+  lastSeenAt   DateTime?
+  chats        ChatUser[]
   sentMessages ChatMessage[]
 }
 

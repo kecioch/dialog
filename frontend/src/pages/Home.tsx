@@ -8,8 +8,10 @@ import DrawerSettings from "../components/chat/drawer/DrawerSettings";
 import DrawerContacts from "../components/chat/drawer/DrawerContacts";
 import { ChatData, Contact } from "../types/chat";
 import { useChatList } from "../hooks/useChatList";
+import { useAuth } from "../hooks/useAuth";
 
 const Home = () => {
+  const { user } = useAuth();
   const {
     chats,
     loading,
@@ -29,6 +31,12 @@ const Home = () => {
     // Clear unread messages
     markAsRead(chat.id);
   };
+
+  const otherUser = selectedChat
+    ? chats
+        .find((c) => c.id === selectedChat.id)
+        ?.users.find((u) => u.user.id !== user?.id)
+    : undefined;
 
   const handleSelectContact = (contact: Contact) => {
     const existingChat = chats.find((chat) =>
@@ -95,6 +103,7 @@ const Home = () => {
           className="flex-1 min-w-0 my-10"
           chatData={selectedChat}
           contactData={selectedContact}
+          otherUser={otherUser} 
           onChatCreated={handleChatCreated}
           onMessageSent={updateLastMessage}
           onDeleteChat={handleDeleteChat}

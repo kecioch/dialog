@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { prisma } from '../lib/prisma';
 import { requireAuth } from '../middleware/auth';
 import { asyncHandler } from '../middleware/asyncHandler';
-import { getIO } from '../socket';
+import { getIO, getOnlineUsers } from '../socket';
 
 const router = Router();
 
@@ -12,11 +12,26 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const userId = req.user?.userId;
+    const onlineUsers = getOnlineUsers();
+
     const users = await prisma.user.findMany({
       where: { id: { not: userId } },
-      select: { id: true, firstName: true, lastName: true, email: true },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        lastSeenAt: true,
+      },
     });
-    res.json(users);
+
+    res.json(
+      users.map((u) => ({
+        ...u,
+        online: onlineUsers.has(u.id),
+        lastSeen: u.lastSeenAt?.toISOString() ?? null,
+      })),
+    );
   }),
 );
 
@@ -26,6 +41,7 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const userId = req.user?.userId;
+    const onlineUsers = getOnlineUsers();
 
     // Find chats
     const chats = await prisma.chat.findMany({
@@ -35,7 +51,14 @@ router.get(
       include: {
         users: {
           include: {
-            user: { select: { id: true, firstName: true, lastName: true } },
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                lastSeenAt: true,
+              },
+            },
           },
         },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 },
@@ -54,7 +77,11 @@ router.get(
       .map((chat) => ({
         id: chat.id,
         createdAt: chat.createdAt,
-        users: chat.users,
+        users: chat.users.map((u) => ({
+          ...u,
+          online: onlineUsers.has(u.user.id),
+          lastSeen: u.user.lastSeenAt?.toISOString() ?? null,
+        })),
         lastMessage: chat.messages[0] ?? null,
         unreadCount: chat._count.messages,
       }))
@@ -77,13 +104,19 @@ router.get(
 router.post('/chats/open', requireAuth, async (req, res) => {
   const { targetUserId } = req.body;
   const currentUserId = req.user?.userId;
+  const onlineUsers = getOnlineUsers();
 
   // Create include rule
   const include = {
     users: {
       include: {
         user: {
-          select: { id: true, firstName: true, lastName: true },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            lastSeenAt: true,
+          },
         },
       },
     },
@@ -130,7 +163,11 @@ router.post('/chats/open', requireAuth, async (req, res) => {
 
   const chatData = {
     id: chat.id,
-    users: chat.users,
+    users: chat.users.map((u) => ({
+      ...u,
+      online: onlineUsers.has(u.user.id),
+      lastSeen: u.user.lastSeenAt?.toISOString() ?? null,
+    })),
     createdAt: chat.createdAt,
     lastMessage: chat.messages[0] ?? null,
     unreadCount: chat._count.messages,
@@ -178,6 +215,8 @@ router.post('/chats/:chatId/messages', requireAuth, async (req, res) => {
   const chatId = req.params.chatId as string;
   const userId = req.user!.userId;
   const { text } = req.body;
+  
+  const onlineUsers = getOnlineUsers();
 
   const member = await prisma.chatUser.findUnique({
     where: { chatId_userId: { chatId, userId: userId } },
@@ -237,7 +276,11 @@ router.post('/chats/:chatId/messages', requireAuth, async (req, res) => {
     io.to(`user:${member.userId}`).emit('new_chat', {
       id: chatId,
       createdAt: message.createdAt,
-      users: chatMembers.map((m) => ({ user: m.user })),
+      users: chatMembers.map((m) => ({
+        user: m.user,
+        online: onlineUsers.has(m.user.id), // ← add this
+        lastSeen: null, // ← add this
+      })),
       lastMessage: message,
       unreadCount: 1,
     });
@@ -247,17 +290,21 @@ router.post('/chats/:chatId/messages', requireAuth, async (req, res) => {
 });
 
 // PATCH /chats/:chatId/read - Mark all messages in chat as read
-router.patch('/chats/:chatId/read', requireAuth, asyncHandler(async (req, res) => {
-  const chatId = req.params.chatId as string;
-  const userId = req.user!.userId;
+router.patch(
+  '/chats/:chatId/read',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const chatId = req.params.chatId as string;
+    const userId = req.user!.userId;
 
-  await prisma.chatMessage.updateMany({
-    where: { chatId, fromId: { not: userId }, read: false },
-    data: { read: true },
-  });
+    await prisma.chatMessage.updateMany({
+      where: { chatId, fromId: { not: userId }, read: false },
+      data: { read: true },
+    });
 
-  res.sendStatus(204);
-}));
+    res.sendStatus(204);
+  }),
+);
 
 // DELETE /chats/:chatId - Soft delete and hard delete if both users deleted
 router.delete('/chats/:chatId', requireAuth, async (req, res) => {
