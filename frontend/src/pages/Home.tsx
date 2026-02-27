@@ -76,6 +76,7 @@ const Home = () => {
             className="max-h-full"
             selectedChat={selectedChat}
             onSelect={handleSelectChat}
+            onStartNewChat={() => setDrawerView("contacts")}
           />
 
           <AnimatePresence>

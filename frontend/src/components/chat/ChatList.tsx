@@ -8,6 +8,8 @@ import { getChatName } from "../../utils/chat";
 import Spinner from "../ui/Spinner";
 import ErrorText from "../ui/ErrorText";
 import { AnimatePresence, motion } from "framer-motion";
+import IconButton from "../ui/IconButton";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   data: ChatData[];
@@ -16,6 +18,7 @@ interface Props {
   className?: string;
   selectedChat?: ChatData;
   onSelect: (chat: ChatData) => void;
+  onStartNewChat: () => void;
 }
 
 const ChatList = ({
@@ -25,6 +28,7 @@ const ChatList = ({
   className,
   selectedChat,
   onSelect,
+  onStartNewChat,
 }: Props) => {
   const { user } = useAuth();
   const [chatList, setChatList] = useState<ChatData[]>([]);
@@ -44,7 +48,15 @@ const ChatList = ({
     <section className={`py-3 min-w-0 pb-0 flex flex-col ${className}`}>
       <div className="px-3">
         <h1 className="text-4xl uppercase text-center mb-7">Chats</h1>
-        <Searchbar onSearch={handleSearchChat} />
+        <div className="flex gap-2 items-center mx-4 mb-10">
+          <IconButton
+            icon={faAdd}
+            fill
+            onClick={onStartNewChat}
+            title="Start new Chat"
+          />
+          <Searchbar onSearch={handleSearchChat} className=""/>
+        </div>
       </div>
       {error && <ErrorText className="px-3 mb-3">{error}</ErrorText>}
       {loading ? (

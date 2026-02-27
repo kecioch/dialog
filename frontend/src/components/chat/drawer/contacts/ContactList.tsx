@@ -32,7 +32,7 @@ const ContactList = ({ onSelect }: Props) => {
 
   return (
     <div>
-      <Searchbar onSearch={handleSearch} />
+      <Searchbar onSearch={handleSearch} className="mx-4 mb-10" />
       {error && <ErrorText className="px-3 mb-3">{error}</ErrorText>}
       {loading ? (
         <Spinner />

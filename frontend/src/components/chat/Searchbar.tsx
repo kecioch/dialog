@@ -3,10 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 interface Props {
+  className?: string;
   onSearch: (text: string) => void;
 }
 
-const Searchbar = ({ onSearch }: Props) => {
+const Searchbar = ({ className, onSearch }: Props) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       onSearch(e.currentTarget.value);
@@ -14,7 +15,7 @@ const Searchbar = ({ onSearch }: Props) => {
   };
 
   return (
-    <div className="relative mx-4 mb-10 group">
+    <div className={`relative group ${className}`}>
       <FontAwesomeIcon
         icon={faSearch}
         className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-color-muted)] group-focus-within:text-[var(--secondary-500)]"
