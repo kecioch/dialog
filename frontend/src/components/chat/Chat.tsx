@@ -16,6 +16,7 @@ import { useChat } from "../../hooks/useChat";
 import { getChatName } from "../../utils/chat";
 import Spinner from "../ui/Spinner";
 import ButtonDropdownMenu from "../ui/ButtonDropDownMenu";
+import { useNotificationSound } from "../../hooks/useNotificationSound";
 
 interface Props {
   chatData: ChatData | undefined;
@@ -35,6 +36,7 @@ const Chat = ({
   onDeleteChat,
 }: Props) => {
   const { user } = useAuth();
+  const { playSound } = useNotificationSound();
   const { messages, loading, sendMessage } = useChat(
     chatData?.id,
     onChatCreated,
@@ -51,6 +53,7 @@ const Chat = ({
 
   const handleSendMessage = () => {
     if (!messageText) return;
+    playSound("sent");
     sendMessage(messageText);
     setMessageText("");
   };

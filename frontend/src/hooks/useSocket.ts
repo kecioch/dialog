@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
-import { connectSocket, disconnectSocket, getSocket } from '../lib/socket';
-import { ChatData, ChatMessageData } from '../types/chat';
-import { useAuth } from './useAuth';
+import { useEffect } from "react";
+import { connectSocket, disconnectSocket, getSocket } from "../lib/socket";
+import { ChatData, ChatMessageData } from "../types/chat";
+import { useAuth } from "./useAuth";
+import { useNotificationSound } from "./useNotificationSound";
 
 interface SocketHandlers {
   onNewMessage: (chatId: string, message: ChatMessageData) => void;
@@ -10,6 +11,7 @@ interface SocketHandlers {
 
 export function useSocket({ onNewMessage, onNewChat }: SocketHandlers) {
   const { user } = useAuth();
+  const { playSound } = useNotificationSound();
 
   useEffect(() => {
     if (!user) return;
@@ -21,6 +23,7 @@ export function useSocket({ onNewMessage, onNewChat }: SocketHandlers) {
       chatId: string;
       message: ChatMessageData;
     }) {
+      playSound("newMessage");
       onNewMessage(payload.chatId, {
         ...payload.message,
         createdAt: new Date(payload.message.createdAt),
@@ -39,12 +42,12 @@ export function useSocket({ onNewMessage, onNewChat }: SocketHandlers) {
       });
     }
 
-    socket.on('new_message', handleNewMessage);
-    socket.on('new_chat', handleNewChat);
+    socket.on("new_message", handleNewMessage);
+    socket.on("new_chat", handleNewChat);
 
     return () => {
-      socket.off('new_message', handleNewMessage);
-      socket.off('new_chat', handleNewChat);
+      socket.off("new_message", handleNewMessage);
+      socket.off("new_chat", handleNewChat);
       disconnectSocket();
     };
   }, [user]);
