@@ -33,7 +33,7 @@ const ContactList = ({ onSelect }: Props) => {
   return (
     <div>
       <Searchbar onSearch={handleSearch} className="mx-4 mb-10" />
-      {error && <ErrorText className="px-3 mb-3">{error}</ErrorText>}
+      {error && <ErrorText className="px-3 mb-3 text-center">{error}</ErrorText>}
       {loading ? (
         <Spinner />
       ) : contactList.length > 0 ? (

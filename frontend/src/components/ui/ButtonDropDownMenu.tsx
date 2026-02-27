@@ -64,7 +64,7 @@ const ButtonDropdownMenu = ({ items, className }: Props) => {
                     className={`text-left px-4 py-3 transition-colors duration-150
                     ${
                       item.danger
-                        ? "bg-red-700 text-[var(--neutral-500)] font-normal hover:bg-red-600 "
+                        ? "bg-red-700 text-[var(--neutral-500)] font-normal hover:bg-red-600 hover:text-[var(--neutral-100)] "
                         : "bg-[var(--bg-dropdown)] text-[var(--text-color-main)]  hover:bg-[var(--bg-dropdown-hover)]"
                     }`}
                     onClick={() => {

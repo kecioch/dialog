@@ -15,6 +15,7 @@ import ButtonDropdownMenu from "../ui/ButtonDropDownMenu";
 import { useNotificationSound } from "../../hooks/useNotificationSound";
 import EmojiPickerButton from "../ui/EmojiPicker";
 import ChatMessageList from "./ChatMessageList";
+import ErrorText from "../ui/ErrorText";
 
 interface Props {
   chatData: ChatData | undefined;
@@ -35,7 +36,7 @@ const Chat = ({
 }: Props) => {
   const { user } = useAuth();
   const { playSound } = useNotificationSound();
-  const { messages, loading, sendMessage } = useChat(
+  const { messages, loading, error, sendMessage } = useChat(
     chatData?.id,
     onChatCreated,
     onMessageSent,
@@ -97,6 +98,9 @@ const Chat = ({
                 ]}
               />
             </div>
+            {error && (
+              <ErrorText className="mt-3 text-center">{error}</ErrorText>
+            )}
           </div>
           <div
             ref={chatBoxRefScrollCallback}

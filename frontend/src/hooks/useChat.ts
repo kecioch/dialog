@@ -34,7 +34,6 @@ export function useChat(
         ),
       )
       .catch(() => {
-        alert("Failed to load messages");
         setError("Failed to load messages");
       })
       .finally(() => setLoading(null));
@@ -100,7 +99,6 @@ export function useChat(
       setMessages((prev) => [...prev, newMessage]);
       onMessageSent(targetChatId, newMessage);
     } catch {
-      alert("Failed to send message");
       setError("Failed to send message");
     } finally {
       setLoading(null);
