@@ -36,7 +36,7 @@ You can see the application in action by checking out the [live demo](https://di
 
 - Real-time messaging (WebSockets)
 - Private conversations
-- Unread indicators & notifications
+- Notifications & user online status
 - Darkmode / Lightmode
 
 ## Authentication
@@ -78,23 +78,29 @@ npm install
 # 4. Configure backend environment variables
 # Rename .env.sample to .env and fill in required values
 
-# 5. Start backend (dev mode)
+# 5. Initializing database schema
+npx prisma migrate dev --name init
+
+# 6. Generate Prisma-Client
+npx prisma generate
+
+# 7. Start backend (dev mode)
 npm run dev
 ```
 
 Open a second terminal:
 
 ```bash
-# 6. Navigate to frontend
+# 8. Navigate to frontend
 cd frontend
 
-# 7. Install frontend dependencies
+# 9. Install frontend dependencies
 npm install
 
-# 8. Configure frontend environment variables
+# 10. Configure frontend environment variables
 # Rename .env.sample to .env and fill in required values
 
-# 9. Start frontend
+# 11. Start frontend
 npm run start
 ```
 
