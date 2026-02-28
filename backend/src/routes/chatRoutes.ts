@@ -101,193 +101,207 @@ router.get(
 );
 
 // POST /chats/open - Get or create chat with a user
-router.post('/chats/open', requireAuth, async (req, res) => {
-  const { targetUserId } = req.body;
-  const currentUserId = req.user?.userId;
-  const onlineUsers = getOnlineUsers();
+router.post(
+  '/chats/open',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const { targetUserId } = req.body;
+    const currentUserId = req.user?.userId;
+    const onlineUsers = getOnlineUsers();
 
-  // Create include rule
-  const include = {
-    users: {
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            lastSeenAt: true,
+    // Create include rule
+    const include = {
+      users: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              lastSeenAt: true,
+            },
           },
         },
       },
-    },
-    messages: {
-      orderBy: { createdAt: 'desc' as const },
-      take: 1,
-      include: {
-        from: {
-          select: { id: true, firstName: true, lastName: true },
+      messages: {
+        orderBy: { createdAt: 'desc' as const },
+        take: 1,
+        include: {
+          from: {
+            select: { id: true, firstName: true, lastName: true },
+          },
         },
       },
-    },
-    _count: {
-      select: {
-        messages: {
-          where: { fromId: { not: currentUserId }, read: false },
+      _count: {
+        select: {
+          messages: {
+            where: { fromId: { not: currentUserId }, read: false },
+          },
         },
       },
-    },
-  };
+    };
 
-  // Find existing chat
-  let chat = await prisma.chat.findFirst({
-    where: {
-      AND: [
-        { users: { some: { userId: currentUserId } } },
-        { users: { some: { userId: targetUserId } } },
-      ],
-    },
-    include,
-  });
-
-  // Create new Chat
-  if (!chat) {
-    chat = await prisma.chat.create({
-      data: {
-        users: {
-          create: [{ userId: currentUserId }, { userId: targetUserId }],
-        },
+    // Find existing chat
+    let chat = await prisma.chat.findFirst({
+      where: {
+        AND: [
+          { users: { some: { userId: currentUserId } } },
+          { users: { some: { userId: targetUserId } } },
+        ],
       },
       include,
     });
-  }
 
-  const chatData = {
-    id: chat.id,
-    users: chat.users.map((u) => ({
-      ...u,
-      online: onlineUsers.has(u.user.id),
-      lastSeen: u.user.lastSeenAt?.toISOString() ?? null,
-    })),
-    createdAt: chat.createdAt,
-    lastMessage: chat.messages[0] ?? null,
-    unreadCount: chat._count.messages,
-  };
+    // Create new Chat
+    if (!chat) {
+      chat = await prisma.chat.create({
+        data: {
+          users: {
+            create: [{ userId: currentUserId }, { userId: targetUserId }],
+          },
+        },
+        include,
+      });
+    }
 
-  res.json(chatData);
-});
+    const chatData = {
+      id: chat.id,
+      users: chat.users.map((u) => ({
+        ...u,
+        online: onlineUsers.has(u.user.id),
+        lastSeen: u.user.lastSeenAt?.toISOString() ?? null,
+      })),
+      createdAt: chat.createdAt,
+      lastMessage: chat.messages[0] ?? null,
+      unreadCount: chat._count.messages,
+    };
+
+    res.json(chatData);
+  }),
+);
 
 // GET /chats/:chatId/messages - Fetch messages respecting visibleFrom
-router.get('/chats/:chatId/messages', requireAuth, async (req, res) => {
-  const chatId = req.params.chatId as string;
-  const userId = req.user!.userId;
+router.get(
+  '/chats/:chatId/messages',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const chatId = req.params.chatId as string;
+    const userId = req.user!.userId;
 
-  const member = await prisma.chatUser.findUnique({
-    where: { chatId_userId: { chatId, userId } },
-  });
+    const member = await prisma.chatUser.findUnique({
+      where: { chatId_userId: { chatId, userId } },
+    });
 
-  if (!member || member.deletedAt) {
-    return res.status(403).json({ error: 'Forbidden' });
-  }
+    if (!member || member.deletedAt) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
 
-  // Find messages
-  const messages = await prisma.chatMessage.findMany({
-    where: {
-      chatId,
-      ...(member.visibleFrom ? { createdAt: { gte: member.visibleFrom } } : {}),
-    },
-    include: {
-      from: { select: { id: true, firstName: true, lastName: true } },
-    },
-    orderBy: { createdAt: 'asc' },
-  });
+    // Find messages
+    const messages = await prisma.chatMessage.findMany({
+      where: {
+        chatId,
+        ...(member.visibleFrom
+          ? { createdAt: { gte: member.visibleFrom } }
+          : {}),
+      },
+      include: {
+        from: { select: { id: true, firstName: true, lastName: true } },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
 
-  // Mark messages as read
-  await prisma.chatMessage.updateMany({
-    where: { chatId, fromId: { not: userId }, read: false },
-    data: { read: true },
-  });
+    // Mark messages as read
+    await prisma.chatMessage.updateMany({
+      where: { chatId, fromId: { not: userId }, read: false },
+      data: { read: true },
+    });
 
-  res.json(messages);
-});
+    res.json(messages);
+  }),
+);
 
 // POST /chats/:chatId/messages - Send message to a known chat
-router.post('/chats/:chatId/messages', requireAuth, async (req, res) => {
-  const chatId = req.params.chatId as string;
-  const userId = req.user!.userId;
-  const { text } = req.body;
-  
-  const onlineUsers = getOnlineUsers();
+router.post(
+  '/chats/:chatId/messages',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const chatId = req.params.chatId as string;
+    const userId = req.user!.userId;
+    const { text } = req.body;
 
-  const member = await prisma.chatUser.findUnique({
-    where: { chatId_userId: { chatId, userId: userId } },
-  });
+    const onlineUsers = getOnlineUsers();
 
-  if (!member) {
-    return res.status(403).json({ error: 'Forbidden' });
-  }
+    const member = await prisma.chatUser.findUnique({
+      where: { chatId_userId: { chatId, userId: userId } },
+    });
 
-  const newVisibleDate = new Date();
+    if (!member) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
 
-  // Sender deleted the chat -> restore view with visibleFrom
-  if (member.deletedAt) {
-    await prisma.chatUser.update({
-      where: { chatId_userId: { chatId, userId } },
+    const newVisibleDate = new Date();
+
+    // Sender deleted the chat -> restore view with visibleFrom
+    if (member.deletedAt) {
+      await prisma.chatUser.update({
+        where: { chatId_userId: { chatId, userId } },
+        data: { deletedAt: null, visibleFrom: newVisibleDate },
+      });
+    }
+
+    // Restore the recipients view
+    await prisma.chatUser.updateMany({
+      where: { chatId, userId: { not: userId }, deletedAt: { not: null } },
       data: { deletedAt: null, visibleFrom: newVisibleDate },
     });
-  }
 
-  // Restore the recipients view
-  await prisma.chatUser.updateMany({
-    where: { chatId, userId: { not: userId }, deletedAt: { not: null } },
-    data: { deletedAt: null, visibleFrom: newVisibleDate },
-  });
-
-  // Create actual message
-  const message = await prisma.chatMessage.create({
-    data: { chatId, fromId: userId, text },
-    include: {
-      from: { select: { id: true, firstName: true, lastName: true } },
-    },
-  });
-
-  // Create socket notification before returning created message
-  const io = getIO();
-
-  // Find all members of this chat to notify
-  const chatMembers = await prisma.chatUser.findMany({
-    where: { chatId },
-    include: {
-      user: { select: { id: true, firstName: true, lastName: true } },
-    },
-  });
-
-  // Notify all members
-  for (const member of chatMembers) {
-    if (member.userId === userId) continue; // dont notify sender
-
-    // new_message: recipient already has the chat in the list
-    io.to(`user:${member.userId}`).emit('new_message', {
-      chatId,
-      message,
+    // Create actual message
+    const message = await prisma.chatMessage.create({
+      data: { chatId, fromId: userId, text },
+      include: {
+        from: { select: { id: true, firstName: true, lastName: true } },
+      },
     });
 
-    // new_chat: lets the recipient add/restore the chat in the list
-    // Build chat payload from already fetched data
-    io.to(`user:${member.userId}`).emit('new_chat', {
-      id: chatId,
-      createdAt: message.createdAt,
-      users: chatMembers.map((m) => ({
-        user: m.user,
-        online: onlineUsers.has(m.user.id), // ← add this
-        lastSeen: null, // ← add this
-      })),
-      lastMessage: message,
-      unreadCount: 1,
-    });
-  }
+    // Create socket notification before returning created message
+    const io = getIO();
 
-  res.status(201).json(message);
-});
+    // Find all members of this chat to notify
+    const chatMembers = await prisma.chatUser.findMany({
+      where: { chatId },
+      include: {
+        user: { select: { id: true, firstName: true, lastName: true } },
+      },
+    });
+
+    // Notify all members
+    for (const member of chatMembers) {
+      if (member.userId === userId) continue; // dont notify sender
+
+      // new_message: recipient already has the chat in the list
+      io.to(`user:${member.userId}`).emit('new_message', {
+        chatId,
+        message,
+      });
+
+      // new_chat: lets the recipient add/restore the chat in the list
+      // Build chat payload from already fetched data
+      io.to(`user:${member.userId}`).emit('new_chat', {
+        id: chatId,
+        createdAt: message.createdAt,
+        users: chatMembers.map((m) => ({
+          user: m.user,
+          online: onlineUsers.has(m.user.id), // ← add this
+          lastSeen: null, // ← add this
+        })),
+        lastMessage: message,
+        unreadCount: 1,
+      });
+    }
+
+    res.status(201).json(message);
+  }),
+);
 
 // PATCH /chats/:chatId/read - Mark all messages in chat as read
 router.patch(
@@ -307,24 +321,28 @@ router.patch(
 );
 
 // DELETE /chats/:chatId - Soft delete and hard delete if both users deleted
-router.delete('/chats/:chatId', requireAuth, async (req, res) => {
-  const chatId = req.params.chatId as string;
-  const userId = req.user!.userId;
-  const now = new Date();
+router.delete(
+  '/chats/:chatId',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const chatId = req.params.chatId as string;
+    const userId = req.user!.userId;
+    const now = new Date();
 
-  // Soft delete
-  await prisma.chatUser.update({
-    where: { chatId_userId: { chatId, userId: userId } },
-    data: { deletedAt: now, visibleFrom: now },
-  });
+    // Soft delete
+    await prisma.chatUser.update({
+      where: { chatId_userId: { chatId, userId: userId } },
+      data: { deletedAt: now, visibleFrom: now },
+    });
 
-  const allMembers = await prisma.chatUser.findMany({ where: { chatId } });
-  const everyoneDeleted = allMembers.every((cu) => cu.deletedAt !== null);
+    const allMembers = await prisma.chatUser.findMany({ where: { chatId } });
+    const everyoneDeleted = allMembers.every((cu) => cu.deletedAt !== null);
 
-  // Hard delete
-  if (everyoneDeleted) await prisma.chat.delete({ where: { id: chatId } });
+    // Hard delete
+    if (everyoneDeleted) await prisma.chat.delete({ where: { id: chatId } });
 
-  res.sendStatus(204);
-});
+    res.sendStatus(204);
+  }),
+);
 
 export default router;
