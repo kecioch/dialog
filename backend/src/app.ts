@@ -19,6 +19,8 @@ app.use(
   }),
 );
 
+app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -27,6 +29,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       maxAge: 1000 * 60 * 5, // 5 minutes for the WebAuthn flow
     },
   }),

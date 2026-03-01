@@ -110,6 +110,7 @@ router.post(
 
     // Store challenge in session
     req.session.passkeyChallenge = options.challenge;
+    console.log('CREATED CHALLENGE', options.challenge);
 
     res.json(options);
   }),
@@ -129,6 +130,7 @@ router.post(
     }
 
     const expectedChallenge = req.session.passkeyChallenge;
+    console.log('SESSION CHALLENGE', expectedChallenge);
     if (!expectedChallenge)
       return res.status(400).json({ error: 'No challenge' });
 

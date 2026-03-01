@@ -3,9 +3,9 @@ import Home from "../pages/Home";
 import { useAuth } from "../hooks/useAuth";
 
 export const RootRedirect = () => {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
 
-  if (isLoading) return null;
+  // if (!isLoading) return <Landing />;
 
   if (user) return <Home />;
   return <Landing />;
