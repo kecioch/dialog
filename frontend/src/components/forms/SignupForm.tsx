@@ -106,7 +106,7 @@ const SignupForm = () => {
           />
         </div>
         {error && <p className="text-red-700 mt-2 text-sm">{error.message}</p>}
-        <Button className="mt-4 w-full" isLoading={isLoading} fill>
+        <Button className="mt-7 w-full" isLoading={isLoading} fill>
           Create Account
         </Button>
       </form>

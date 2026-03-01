@@ -8,18 +8,18 @@ import TextNavLink from "../components/ui/TextNavLink";
 
 const Landing = () => {
   return (
-    <div className="min-h-screen from-[var(--primary-700)] to-[var(--primary-500)] bg-gradient-to-br flex flex-col">
-      <nav className="h-20 flex justify-between items-center p-10">
+    <div className="min-h-svh from-[var(--primary-700)] to-[var(--primary-500)] bg-gradient-to-br flex flex-col">
+      <nav className="h-20 flex justify-between items-center p-4 pr-6 sm:p-10">
         <LogoBig />
         <div className="flex gap-8 justify-center items-center">
           <TextNavLink to="/login" className="text-[var(--neutral-100)]">
             Login
           </TextNavLink>
-          <ButtonNavLink to="/signup">Signup</ButtonNavLink>
+          <ButtonNavLink to="/signup" className="hidden sm:block">Signup</ButtonNavLink>
         </div>
       </nav>
-      <main className="flex flex-1 justify-center items-center">
-        <div className="w-[60%] flex justify-center items-center">
+      <main className="flex flex-1 justify-center items-center flex-wrap">
+        <div className="w-full sm:w-[60%] flex justify-center items-center">
           <div className="flex justify-center items-start flex-col gap-10">
             <h1 className="text-5xl/snug xl:text-7xl/snug uppercase font-thin text-[var(--neutral-100)]">
               Chat from <br />
@@ -53,7 +53,7 @@ const Landing = () => {
           </div>
         </div>
         <div
-          className={`w-[40%] h-[45em] bg-contain bg-right bg-no-repeat ${styles.heroImage}`}
+          className={`hidden sm:block w-[40%] h-[45em] bg-contain bg-right bg-no-repeat ${styles.heroImage}`}
         />
       </main>
     </div>

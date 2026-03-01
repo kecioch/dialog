@@ -59,7 +59,7 @@ const LoginForm = () => {
           Password
         </FormInput>
         {error && <p className="text-red-700 mt-2 text-sm">{error}</p>}
-        <Button className="mt-4 w-full" isLoading={isLoading} fill>
+        <Button className="mt-7 w-full" isLoading={isLoading} fill>
           Login
         </Button>
       </form>
