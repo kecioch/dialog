@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import Avatar from "./Avatar";
 import IconButton from "../ui/IconButton";
 import {
-  faPaperclip,
   faPaperPlane,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
