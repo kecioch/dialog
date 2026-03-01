@@ -29,7 +29,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 5, // 5 minutes for the WebAuthn flow
     },
   }),
