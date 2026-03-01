@@ -37,7 +37,7 @@ const FormInput = ({
         id={id}
         type={resolvedType}
         value={value}
-        className={`peer w-full bg-transparent border-b-[0.1em] p-2 pb-1 pt-5 text-[var(--neutral-500)] focus:border-[var(--primary-300)] focus:outline-none placeholder-transparent 
+        className={`peer w-full bg-transparent border-b-[0.1em] p-2 pb-1 pt-5 text-[var(--neutral-500)] focus:text-[var(--neutral-500)] focus:border-[var(--primary-300)] focus:outline-none placeholder-transparent 
           isPassword ? "pr-10" : ""
           ${error ? "border-red-700 text-red-700" : "border-[var(--primary-700)]"}`}
         placeholder={placeholder}
