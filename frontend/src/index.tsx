@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Analytics } from "@vercel/analytics/react"
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -15,6 +16,7 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}>
+          <Analytics />
           <App />
         </GoogleOAuthProvider>
       </AuthProvider>
